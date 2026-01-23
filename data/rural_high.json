@@ -1,0 +1,460 @@
+{
+  "school": "Rural High",
+  "tracks": {
+    "Special education": [
+      "Special Ed Math 1",
+      "Special Ed Math 2"
+    ],
+    "Lower-basic": [
+      "Basic Math",
+      "Algebra A",
+      "Algebra B"
+    ],
+    "Upper-basic": [
+      "Algebra A",
+      "Algebra B",
+      "Algebra 1",
+      "Geometry"
+    ],
+    "Regular": [
+      "Algebra 1",
+      "Geometry",
+      "Algebra 2",
+      "Precalculus"
+    ],
+    "Accelerated": [
+      "Acc Algebra 1",
+      "Acc Geometry",
+      "Acc Alg/Trig",
+      "Acc Precalculus",
+      "Acc Calculus"
+    ]
+  },
+  "nodes": [
+    "8th Grade",
+    "Transfer",
+    "Outside Math",
+    "Acc Algebra 1",
+    "Acc Geometry",
+    "Acc Alg/Trig",
+    "Acc Precalculus",
+    "Acc Calculus",
+    "Algebra 1",
+    "Geometry",
+    "Algebra 2",
+    "Precalculus",
+    "Basic Math",
+    "Algebra A",
+    "Algebra B",
+    "Special Ed Math 1",
+    "Special Ed Math 2",
+    "Graduate",
+    "Leave School"
+  ],
+  "positions": {
+    "8th Grade": [
+      -650,
+      0
+    ],
+    "Transfer": [
+      -650,
+      130
+    ],
+    "Outside Math": [
+      -650,
+      -130
+    ],
+    "Acc Algebra 1": [
+      -420,
+      260
+    ],
+    "Acc Geometry": [
+      -180,
+      260
+    ],
+    "Acc Alg/Trig": [
+      60,
+      260
+    ],
+    "Acc Precalculus": [
+      300,
+      260
+    ],
+    "Acc Calculus": [
+      520,
+      260
+    ],
+    "Algebra 1": [
+      -180,
+      40
+    ],
+    "Geometry": [
+      60,
+      40
+    ],
+    "Algebra 2": [
+      300,
+      40
+    ],
+    "Precalculus": [
+      520,
+      40
+    ],
+    "Basic Math": [
+      -420,
+      -150
+    ],
+    "Algebra A": [
+      -180,
+      -150
+    ],
+    "Algebra B": [
+      60,
+      -150
+    ],
+    "Special Ed Math 1": [
+      -420,
+      -300
+    ],
+    "Special Ed Math 2": [
+      -180,
+      -300
+    ],
+    "Graduate": [
+      780,
+      160
+    ],
+    "Leave School": [
+      780,
+      -250
+    ]
+  },
+  "edges": [
+    [
+      "8th Grade",
+      "Basic Math",
+      0.43
+    ],
+    [
+      "8th Grade",
+      "Algebra A",
+      0.19
+    ],
+    [
+      "8th Grade",
+      "Algebra 1",
+      0.06
+    ],
+    [
+      "8th Grade",
+      "Acc Algebra 1",
+      0.05
+    ],
+    [
+      "8th Grade",
+      "Special Ed Math 1",
+      0.12
+    ],
+    [
+      "8th Grade",
+      "Outside Math",
+      0.04
+    ],
+    [
+      "8th Grade",
+      "8th Grade",
+      0.11
+    ],
+    [
+      "Transfer",
+      "Algebra 1",
+      0.24
+    ],
+    [
+      "Transfer",
+      "Geometry",
+      0.14
+    ],
+    [
+      "Transfer",
+      "Algebra 2",
+      0.17
+    ],
+    [
+      "Transfer",
+      "Outside Math",
+      0.21
+    ],
+    [
+      "Transfer",
+      "Transfer",
+      0.24
+    ],
+    [
+      "Outside Math",
+      "Outside Math",
+      0.97
+    ],
+    [
+      "Outside Math",
+      "Leave School",
+      0.03
+    ],
+    [
+      "Acc Algebra 1",
+      "Acc Geometry",
+      0.78
+    ],
+    [
+      "Acc Algebra 1",
+      "Geometry",
+      0.15
+    ],
+    [
+      "Acc Algebra 1",
+      "Acc Algebra 1",
+      0.07
+    ],
+    [
+      "Acc Geometry",
+      "Acc Alg/Trig",
+      0.63
+    ],
+    [
+      "Acc Geometry",
+      "Algebra 2",
+      0.16
+    ],
+    [
+      "Acc Geometry",
+      "Acc Geometry",
+      0.21
+    ],
+    [
+      "Acc Alg/Trig",
+      "Acc Precalculus",
+      0.77
+    ],
+    [
+      "Acc Alg/Trig",
+      "Acc Geometry",
+      0.06
+    ],
+    [
+      "Acc Alg/Trig",
+      "Acc Alg/Trig",
+      0.17
+    ],
+    [
+      "Acc Precalculus",
+      "Acc Calculus",
+      0.4
+    ],
+    [
+      "Acc Precalculus",
+      "Graduate",
+      0.51
+    ],
+    [
+      "Acc Precalculus",
+      "Acc Precalculus",
+      0.09
+    ],
+    [
+      "Acc Calculus",
+      "Graduate",
+      1.0
+    ],
+    [
+      "Algebra 1",
+      "Geometry",
+      0.72
+    ],
+    [
+      "Algebra 1",
+      "Outside Math",
+      0.12
+    ],
+    [
+      "Algebra 1",
+      "Graduate",
+      0.02
+    ],
+    [
+      "Algebra 1",
+      "Algebra 1",
+      0.14
+    ],
+    [
+      "Geometry",
+      "Algebra 2",
+      0.47
+    ],
+    [
+      "Geometry",
+      "Outside Math",
+      0.22
+    ],
+    [
+      "Geometry",
+      "Graduate",
+      0.06
+    ],
+    [
+      "Geometry",
+      "Geometry",
+      0.25
+    ],
+    [
+      "Algebra 2",
+      "Precalculus",
+      0.17
+    ],
+    [
+      "Algebra 2",
+      "Outside Math",
+      0.38
+    ],
+    [
+      "Algebra 2",
+      "Graduate",
+      0.03
+    ],
+    [
+      "Algebra 2",
+      "Algebra 2",
+      0.42
+    ],
+    [
+      "Precalculus",
+      "Graduate",
+      0.7
+    ],
+    [
+      "Precalculus",
+      "Outside Math",
+      0.2
+    ],
+    [
+      "Precalculus",
+      "Precalculus",
+      0.1
+    ],
+    [
+      "Basic Math",
+      "Algebra A",
+      0.46
+    ],
+    [
+      "Basic Math",
+      "Outside Math",
+      0.22
+    ],
+    [
+      "Basic Math",
+      "Leave School",
+      0.17
+    ],
+    [
+      "Basic Math",
+      "Basic Math",
+      0.15
+    ],
+    [
+      "Algebra A",
+      "Algebra B",
+      0.64
+    ],
+    [
+      "Algebra A",
+      "Geometry",
+      0.15
+    ],
+    [
+      "Algebra A",
+      "Outside Math",
+      0.12
+    ],
+    [
+      "Algebra A",
+      "Algebra A",
+      0.09
+    ],
+    [
+      "Algebra B",
+      "Algebra 1",
+      0.38
+    ],
+    [
+      "Algebra B",
+      "Geometry",
+      0.28
+    ],
+    [
+      "Algebra B",
+      "Outside Math",
+      0.1
+    ],
+    [
+      "Algebra B",
+      "Algebra B",
+      0.24
+    ],
+    [
+      "Special Ed Math 1",
+      "Special Ed Math 2",
+      0.46
+    ],
+    [
+      "Special Ed Math 1",
+      "Basic Math",
+      0.1
+    ],
+    [
+      "Special Ed Math 1",
+      "Leave School",
+      0.34
+    ],
+    [
+      "Special Ed Math 1",
+      "Special Ed Math 1",
+      0.1
+    ],
+    [
+      "Special Ed Math 2",
+      "Basic Math",
+      0.07
+    ],
+    [
+      "Special Ed Math 2",
+      "Outside Math",
+      0.21
+    ],
+    [
+      "Special Ed Math 2",
+      "Leave School",
+      0.43
+    ],
+    [
+      "Special Ed Math 2",
+      "Graduate",
+      0.14
+    ],
+    [
+      "Special Ed Math 2",
+      "Special Ed Math 2",
+      0.15
+    ],
+    [
+      "Graduate",
+      "Graduate",
+      1.0
+    ],
+    [
+      "Leave School",
+      "Leave School",
+      1.0
+    ]
+  ],
+  "notes": "Demo transition values are illustrative. Replace with real transition matrix for production.\nBalanced outgoing probabilities: added/normalized self-loops so each node's outgoing weights sum to 1."
+}

@@ -1,0 +1,360 @@
+{
+  "school": "Magnet High",
+  "tracks": {
+    "Honors": [
+      "Algebra I Honors",
+      "Geometry Honors",
+      "Algebra II Honors",
+      "Functions",
+      "Discrete Math"
+    ],
+    "Pre-IB": [
+      "Geometry Pre-IB",
+      "Alg II & Trig Pre-IB"
+    ],
+    "IB-general": [
+      "Functions, Stat, Trig IB",
+      "Precalc & Disc Math IB"
+    ],
+    "IB-standard": [
+      "Precalculus IB-s",
+      "Calculus IB-s"
+    ],
+    "IB-honors": [
+      "Precalc & Trig IB-h",
+      "Adv Calc IB-h"
+    ]
+  },
+  "nodes": [
+    "7th Grade",
+    "Transfer",
+    "Outside Math",
+    "Algebra I Honors",
+    "Geometry Honors",
+    "Geometry Pre-IB",
+    "Algebra II Honors",
+    "Functions",
+    "Discrete Math",
+    "Alg II & Trig Pre-IB",
+    "Functions, Stat, Trig IB",
+    "Precalc & Disc Math IB",
+    "Precalculus IB-s",
+    "Calculus IB-s",
+    "Precalc & Trig IB-h",
+    "Adv Calc IB-h",
+    "Graduate",
+    "Leave School"
+  ],
+  "positions": {
+    "7th Grade": [
+      -650,
+      0
+    ],
+    "Transfer": [
+      -650,
+      160
+    ],
+    "Outside Math": [
+      -650,
+      -180
+    ],
+    "Algebra I Honors": [
+      -400,
+      0
+    ],
+    "Geometry Honors": [
+      -140,
+      160
+    ],
+    "Algebra II Honors": [
+      140,
+      240
+    ],
+    "Functions": [
+      420,
+      240
+    ],
+    "Discrete Math": [
+      700,
+      240
+    ],
+    "Geometry Pre-IB": [
+      -140,
+      -140
+    ],
+    "Alg II & Trig Pre-IB": [
+      140,
+      -220
+    ],
+    "Functions, Stat, Trig IB": [
+      420,
+      -40
+    ],
+    "Precalc & Disc Math IB": [
+      700,
+      -40
+    ],
+    "Precalc & Trig IB-h": [
+      700,
+      130
+    ],
+    "Adv Calc IB-h": [
+      950,
+      130
+    ],
+    "Precalculus IB-s": [
+      700,
+      50
+    ],
+    "Calculus IB-s": [
+      950,
+      50
+    ],
+    "Graduate": [
+      1170,
+      0
+    ],
+    "Leave School": [
+      1170,
+      -340
+    ]
+  },
+  "edges": [
+    [
+      "7th Grade",
+      "Algebra I Honors",
+      0.97
+    ],
+    [
+      "7th Grade",
+      "7th Grade",
+      0.03
+    ],
+    [
+      "Transfer",
+      "Algebra I Honors",
+      0.27
+    ],
+    [
+      "Transfer",
+      "Geometry Pre-IB",
+      0.18
+    ],
+    [
+      "Transfer",
+      "Alg II & Trig Pre-IB",
+      0.18
+    ],
+    [
+      "Transfer",
+      "Outside Math",
+      0.09
+    ],
+    [
+      "Transfer",
+      "Transfer",
+      0.28
+    ],
+    [
+      "Outside Math",
+      "Leave School",
+      0.4049
+    ],
+    [
+      "Outside Math",
+      "Outside Math",
+      0.5951
+    ],
+    [
+      "Algebra I Honors",
+      "Geometry Pre-IB",
+      0.42
+    ],
+    [
+      "Algebra I Honors",
+      "Geometry Honors",
+      0.39
+    ],
+    [
+      "Algebra I Honors",
+      "Leave School",
+      0.18
+    ],
+    [
+      "Algebra I Honors",
+      "Algebra I Honors",
+      0.01
+    ],
+    [
+      "Geometry Honors",
+      "Algebra II Honors",
+      0.58
+    ],
+    [
+      "Geometry Honors",
+      "Functions",
+      0.2
+    ],
+    [
+      "Geometry Honors",
+      "Outside Math",
+      0.2
+    ],
+    [
+      "Geometry Honors",
+      "Geometry Honors",
+      0.02
+    ],
+    [
+      "Geometry Pre-IB",
+      "Alg II & Trig Pre-IB",
+      0.82
+    ],
+    [
+      "Geometry Pre-IB",
+      "Outside Math",
+      0.1
+    ],
+    [
+      "Geometry Pre-IB",
+      "Geometry Pre-IB",
+      0.08
+    ],
+    [
+      "Algebra II Honors",
+      "Functions",
+      0.63
+    ],
+    [
+      "Algebra II Honors",
+      "Outside Math",
+      0.27
+    ],
+    [
+      "Algebra II Honors",
+      "Algebra II Honors",
+      0.1
+    ],
+    [
+      "Functions",
+      "Functions, Stat, Trig IB",
+      0.52
+    ],
+    [
+      "Functions",
+      "Outside Math",
+      0.18
+    ],
+    [
+      "Functions",
+      "Graduate",
+      0.04
+    ],
+    [
+      "Functions",
+      "Functions",
+      0.26
+    ],
+    [
+      "Discrete Math",
+      "Discrete Math",
+      1.0
+    ],
+    [
+      "Alg II & Trig Pre-IB",
+      "Functions, Stat, Trig IB",
+      0.35
+    ],
+    [
+      "Alg II & Trig Pre-IB",
+      "Precalculus IB-s",
+      0.15
+    ],
+    [
+      "Alg II & Trig Pre-IB",
+      "Precalc & Trig IB-h",
+      0.19
+    ],
+    [
+      "Alg II & Trig Pre-IB",
+      "Outside Math",
+      0.21
+    ],
+    [
+      "Alg II & Trig Pre-IB",
+      "Alg II & Trig Pre-IB",
+      0.1
+    ],
+    [
+      "Functions, Stat, Trig IB",
+      "Precalc & Disc Math IB",
+      0.75
+    ],
+    [
+      "Functions, Stat, Trig IB",
+      "Outside Math",
+      0.14
+    ],
+    [
+      "Functions, Stat, Trig IB",
+      "Functions, Stat, Trig IB",
+      0.11
+    ],
+    [
+      "Precalc & Disc Math IB",
+      "Graduate",
+      1.0
+    ],
+    [
+      "Precalculus IB-s",
+      "Calculus IB-s",
+      0.82
+    ],
+    [
+      "Precalculus IB-s",
+      "Graduate",
+      0.15
+    ],
+    [
+      "Precalculus IB-s",
+      "Precalculus IB-s",
+      0.03
+    ],
+    [
+      "Calculus IB-s",
+      "Graduate",
+      1.0
+    ],
+    [
+      "Precalc & Trig IB-h",
+      "Adv Calc IB-h",
+      0.89
+    ],
+    [
+      "Precalc & Trig IB-h",
+      "Graduate",
+      0.04
+    ],
+    [
+      "Precalc & Trig IB-h",
+      "Precalc & Trig IB-h",
+      0.07
+    ],
+    [
+      "Adv Calc IB-h",
+      "Graduate",
+      1.0
+    ],
+    [
+      "Graduate",
+      "Graduate",
+      1.0
+    ],
+    [
+      "Leave School",
+      "Leave School",
+      1.0
+    ]
+  ],
+  "notes": "Demo transition values are illustrative. Replace with real transition matrix for production.\nBalanced outgoing probabilities: added/normalized self-loops so each node's outgoing weights sum to 1."
+}
