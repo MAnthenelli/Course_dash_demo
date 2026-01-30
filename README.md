@@ -1,13 +1,8 @@
-# Curricular Flows Demo (Cytoscape v4 — self-loops)
+# Course Pathways (tabs)
 
-## What changed
+Adds tabbed placeholder charts for Gender, Race, and Gender × Race.
 
-- Added/normalized **self-loop edges (course → same course)** so that **each node's outgoing probabilities sum to 1**.
-- Self-loops are shown as **looped arrows** with labels (retake/repeat share).
-- No connectivity helpers UI.
-- No Streamlit `use_container_width` warnings (Altair uses `width='stretch'`).
-
-## Run
+Run:
 
 ```bash
 python -m venv .venv
@@ -15,7 +10,3 @@ python -m venv .venv
 pip install -r requirements.txt
 streamlit run app.py
 ```
-
-## Data
-
-Balanced JSONs are in `data/`.

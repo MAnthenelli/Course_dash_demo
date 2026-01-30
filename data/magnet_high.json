@@ -344,17 +344,7 @@
       "Adv Calc IB-h",
       "Graduate",
       1.0
-    ],
-    [
-      "Graduate",
-      "Graduate",
-      1.0
-    ],
-    [
-      "Leave School",
-      "Leave School",
-      1.0
     ]
   ],
-  "notes": "Demo transition values are illustrative. Replace with real transition matrix for production.\nBalanced outgoing probabilities: added/normalized self-loops so each node's outgoing weights sum to 1."
+  "notes": "Demo transition values are illustrative. Replace with real transition matrix for production.\nBalanced with self-loops: non-terminal nodes have outgoing sum 1; terminals have no outgoing edges."
 }

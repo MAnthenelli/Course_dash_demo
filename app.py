@@ -9,7 +9,27 @@ import pandas as pd
 import streamlit as st
 from st_cytoscape import cytoscape
 
-st.set_page_config(page_title='Curricular Flows Demo', layout='wide')
+st.set_page_config(page_title='Course Pathways', layout='wide')
+
+st.markdown(
+    """
+<style>
+  .stApp { font-size: 18px; }
+  .stMarkdown, .stText, .stCaption, .stAlert { line-height: 1.5; }
+  h1 { font-size: 2.0rem; letter-spacing: 0.2px; }
+  h2 { font-size: 1.55rem; }
+  h3 { font-size: 1.25rem; }
+  [data-testid="stSidebar"] { font-size: 1.0rem; }
+  [data-testid="stSidebar"] .stMarkdown p { font-size: 1.0rem; }
+  .stButton > button { font-size: 1.0rem; padding: 0.55rem 0.9rem; border-radius: 10px; }
+  .stSelectbox, .stTextInput, .stRadio, .stMultiSelect { font-size: 1.0rem; }
+  .stCaption { font-size: 0.98rem; color: #374151; }
+  [data-testid="stWidgetLabel"] p { font-size: 1.0rem; }
+  .block-container { padding-top: 1.25rem; padding-bottom: 2.25rem; }
+</style>
+""",
+    unsafe_allow_html=True,
+)
 
 DATA_DIR = Path(__file__).parent / 'data'
 SCHOOL_FILES = {
@@ -34,23 +54,12 @@ DIM_COLOR = '#D0D4DC'
 EDGE_COLOR = '#8D99AE'
 EDGE_HIGHLIGHT = '#111827'
 NODE_BORDER = '#111827'
+TERMINALS = {'Graduate', 'Leave School'}
 
 
 @st.cache_data
 def load_school_graph(school_name: str) -> dict:
     return json.loads(SCHOOL_FILES[school_name].read_text(encoding='utf-8'))
-
-
-def placeholder_demographics() -> pd.DataFrame:
-    rows = [
-        {'Dimension': 'Gender', 'Group': 'Female', 'Share': 0.52},
-        {'Dimension': 'Gender', 'Group': 'Male', 'Share': 0.48},
-        {'Dimension': 'Race', 'Group': 'Black', 'Share': 0.28},
-        {'Dimension': 'Race', 'Group': 'Latine', 'Share': 0.18},
-        {'Dimension': 'Race', 'Group': 'White', 'Share': 0.44},
-        {'Dimension': 'Race', 'Group': 'Asian', 'Share': 0.10},
-    ]
-    return pd.DataFrame(rows)
 
 
 def node_tracks(course: str, tracks: dict) -> list:
@@ -68,9 +77,7 @@ def edge_tracks(src: str, dst: str, tracks: dict) -> list:
     src_t = set(node_tracks(src, tracks))
     dst_t = set(node_tracks(dst, tracks))
     inter = sorted(src_t.intersection(dst_t))
-    if inter:
-        return inter
-    return sorted(src_t.union(dst_t))
+    return inter if inter else sorted(src_t.union(dst_t))
 
 
 def _slugify(s: str) -> str:
@@ -106,15 +113,21 @@ def get_self_loop_p(graph: dict, course: str) -> float | None:
     return None
 
 
+def friendly_percent(x: float) -> str:
+    return f"{x * 100:.0f}%"
+
+
 def course_panel(graph: dict, course: str):
     tracks = graph['tracks']
+
     st.subheader(course)
+
     tlist = node_tracks(course, tracks)
-    st.caption('Track membership: ' + (', '.join(tlist) if tlist else '(none)'))
+    st.write('**Path group:** ' + (', '.join(tlist) if tlist else 'Not listed'))
 
     loop_p = get_self_loop_p(graph, course)
     if loop_p is not None and loop_p > 0:
-        st.metric('Retake / repeat (self-loop)', f"{loop_p:.2f}")
+        st.write(f"**Repeat this class next year:** {friendly_percent(loop_p)}")
 
     incoming = [(s, p) for (s, t, p) in graph['edges'] if t == course and s != course]
     outgoing = [(t, p) for (s, t, p) in graph['edges'] if s == course and t != course]
@@ -122,32 +135,93 @@ def course_panel(graph: dict, course: str):
     def fmt(items):
         return sorted(items, key=lambda x: -x[1])
 
-    with st.expander('Outgoing transitions (top 5, excluding retake)', expanded=True):
-        for dst, p in fmt(outgoing)[:5]:
-            st.write(f'- **{dst}**: {p:.2f}')
-
-    with st.expander('Incoming transitions (top 5)', expanded=False):
-        for src, p in fmt(incoming)[:5]:
-            st.write(f'- **{src}**: {p:.2f}')
+    st.markdown('---')
+    st.write('### What students do next')
+    if outgoing:
+        for dst, p in fmt(outgoing)[:6]:
+            st.write(f"- **{dst}**: {friendly_percent(float(p))}")
+    else:
+        st.write('No next-step arrows from this class.')
 
     st.markdown('---')
-    st.caption('PLACEHOLDER: Demographics chart (fake demo data — same for all courses)')
+    st.write('### Where students come from')
+    if incoming:
+        for src, p in fmt(incoming)[:6]:
+            st.write(f"- **{src}**: {friendly_percent(float(p))}")
+    else:
+        st.write('No arrows pointing into this class.')
 
-    demo_df = placeholder_demographics()
-    chart = (
-        alt.Chart(demo_df)
-        .mark_bar()
-        .encode(
-            x=alt.X('Share:Q', axis=alt.Axis(format='%')),
-            y=alt.Y('Group:N', sort='-x'),
-            color=alt.Color('Dimension:N'),
-            tooltip=['Dimension', 'Group', alt.Tooltip('Share:Q', format='.1%')],
+    st.markdown('---')
+    st.write('### Example charts (demo)')
+    st.write('Pick a tab to see a placeholder chart. These are not real numbers yet.')
+
+    tab_gender, tab_race, tab_both = st.tabs(['Gender', 'Race', 'Gender × Race'], width='stretch')
+
+    with tab_gender:
+        st.write('**Gender (placeholder)**')
+        gender_df = pd.DataFrame([
+            {'Group': 'Girls', 'Share': 0.52},
+            {'Group': 'Boys', 'Share': 0.48},
+        ])
+        gender_chart = (
+            alt.Chart(gender_df)
+            .mark_bar(cornerRadiusTopRight=6, cornerRadiusBottomRight=6)
+            .encode(
+                x=alt.X('Share:Q', axis=alt.Axis(format='%'), title='Share of students'),
+                y=alt.Y('Group:N', sort='-x', title=''),
+                tooltip=[alt.Tooltip('Share:Q', format='.0%')],
+            )
+            .properties(height=220)
         )
-        .properties(height=240)
-    )
+        st.altair_chart(gender_chart, width='stretch')
 
-    # Avoid Streamlit's use_container_width deprecation.
-    st.altair_chart(chart, width='stretch')
+    with tab_race:
+        st.write('**Race (placeholder)**')
+        race_df = pd.DataFrame([
+            {'Group': 'Black', 'Share': 0.28},
+            {'Group': 'Latine', 'Share': 0.18},
+            {'Group': 'White', 'Share': 0.44},
+            {'Group': 'Asian', 'Share': 0.10},
+        ])
+        race_chart = (
+            alt.Chart(race_df)
+            .mark_bar(cornerRadiusTopRight=6, cornerRadiusBottomRight=6)
+            .encode(
+                x=alt.X('Share:Q', axis=alt.Axis(format='%'), title='Share of students'),
+                y=alt.Y('Group:N', sort='-x', title=''),
+                tooltip=[alt.Tooltip('Share:Q', format='.0%')],
+            )
+            .properties(height=240)
+        )
+        st.altair_chart(race_chart, width='stretch')
+
+    with tab_both:
+        st.write('**Gender × Race (placeholder)**')
+        st.write('This is an “intersection”: we look at two things at the same time.')
+
+        both_df = pd.DataFrame([
+            {'Gender': 'Girls', 'Race': 'Black', 'Share': 0.15},
+            {'Gender': 'Girls', 'Race': 'Latine', 'Share': 0.10},
+            {'Gender': 'Girls', 'Race': 'White', 'Share': 0.22},
+            {'Gender': 'Girls', 'Race': 'Asian', 'Share': 0.05},
+            {'Gender': 'Boys', 'Race': 'Black', 'Share': 0.13},
+            {'Gender': 'Boys', 'Race': 'Latine', 'Share': 0.08},
+            {'Gender': 'Boys', 'Race': 'White', 'Share': 0.22},
+            {'Gender': 'Boys', 'Race': 'Asian', 'Share': 0.05},
+        ])
+
+        heat = (
+            alt.Chart(both_df)
+            .mark_rect(cornerRadius=6)
+            .encode(
+                x=alt.X('Race:N', title='Race'),
+                y=alt.Y('Gender:N', title='Gender'),
+                color=alt.Color('Share:Q', title='Share', scale=alt.Scale(scheme='blues')),
+                tooltip=['Gender', 'Race', alt.Tooltip('Share:Q', format='.0%')],
+            )
+            .properties(height=180)
+        )
+        st.altair_chart(heat, width='stretch')
 
 
 def build_cytoscape_elements(graph: dict, selected_node: str | None, selected_edge: str | None,
@@ -157,7 +231,7 @@ def build_cytoscape_elements(graph: dict, selected_node: str | None, selected_ed
 
     focus_tracks = set()
     focus_neighbors = set()
-    focus_edges = set()  # course edge ids "Course A→Course B"
+    focus_edges = set()
 
     if selected_node:
         focus_tracks.update(node_tracks(selected_node, tracks))
@@ -179,7 +253,6 @@ def build_cytoscape_elements(graph: dict, selected_node: str | None, selected_ed
 
     elements = []
 
-    # Nodes
     for course in graph['nodes']:
         t_primary = primary_track(course, tracks)
         fill = TRACK_COLORS.get(t_primary, '#2B2D42')
@@ -201,44 +274,39 @@ def build_cytoscape_elements(graph: dict, selected_node: str | None, selected_ed
             classes.append('selected')
 
         uid = course_to_uid[course]
-
         node_el = {
-            "data": {
-                "id": uid,
-                "label": course,
-                "bg": fill,
-                "opacity": opacity,
-                "border": NODE_BORDER,
-                "borderWidth": border_width,
+            'data': {
+                'id': uid,
+                'label': course,
+                'bg': fill,
+                'opacity': opacity,
+                'border': NODE_BORDER,
+                'borderWidth': border_width,
             },
-            "classes": ' '.join(classes),
+            'classes': ' '.join(classes),
         }
         if course in positions:
             x, y = positions[course]
-            node_el["position"] = {"x": x, "y": y}
+            node_el['position'] = {'x': x, 'y': y}
         elements.append(node_el)
 
-    # Edges
     for (s, t, p) in graph['edges']:
-        course_eid = f'{s}→{t}'
         src_uid = course_to_uid[s]
         dst_uid = course_to_uid[t]
         uid_eid = f'{src_uid}→{dst_uid}'
+        course_eid = f'{s}→{t}'
 
         is_self = (s == t)
 
-        show_label = False
-        if is_self:
-            show_label = True  # always show retake/loop proportion
-        elif selected_node and (s == selected_node or t == selected_node):
+        show_label = is_self
+        if (not is_self) and selected_node and (s == selected_node or t == selected_node):
             show_label = True
-        elif selected_edge and course_eid == selected_edge:
+        if (not is_self) and selected_edge and course_eid == selected_edge:
             show_label = True
 
         opacity = 0.85
         ecolor = EDGE_COLOR
         classes = []
-
         if is_self:
             classes.append('selfloop')
 
@@ -254,43 +322,44 @@ def build_cytoscape_elements(graph: dict, selected_node: str | None, selected_ed
                 opacity = 0.10
                 classes.append('dim')
 
-        if selected_edge and course_eid == selected_edge:
-            classes.append('selected')
+        label_txt = friendly_percent(float(p)) if show_label else ''
 
         elements.append({
-            "data": {
-                "id": uid_eid,
-                "source": src_uid,
-                "target": dst_uid,
-                "label": (f'{float(p):.2f}' if show_label else ''),
-                "color": ecolor,
-                "opacity": opacity,
+            'data': {
+                'id': uid_eid,
+                'source': src_uid,
+                'target': dst_uid,
+                'label': label_txt,
+                'color': ecolor,
+                'opacity': opacity,
             },
-            "classes": ' '.join(classes),
+            'classes': ' '.join(classes),
         })
 
     return elements
 
 
-# Sidebar
 with st.sidebar:
-    st.title('Curricular Flows')
-    st.caption('Interactive demo inspired by McFarland (2006) Figures 1–2.')
+    st.title('Course Pathways')
+    st.write('This map shows how students move from one math class to the next.')
+    st.write('Tap a circle to see details on the right.')
 
-    school = st.selectbox('School', list(SCHOOL_FILES.keys()), index=0)
+    school = st.selectbox('Choose a school', list(SCHOOL_FILES.keys()), index=0)
 
-    st.markdown('### Filters (coming soon)')
+    st.markdown('---')
+    st.subheader('Filters')
+    st.write('These filters are not ready yet.')
     st.selectbox('Subject', ['Math'], disabled=True)
     st.selectbox('Race', ['All'], disabled=True)
     st.selectbox('Gender', ['All'], disabled=True)
-    st.info('Subject and Race/Gender filtering is disabled in this demo. It will be enabled in the full product.')
 
-    graph = load_school_graph(school)
-
-    st.markdown('### Tracks (legend)')
-    for t in graph['tracks'].keys():
+    gtmp = load_school_graph(school)
+    st.markdown('---')
+    st.subheader('Color key')
+    st.write('Colors show different course paths.')
+    for t in gtmp['tracks'].keys():
         st.markdown(
-            "- <span style='display:inline-block;width:10px;height:10px;background:{};border:1px solid #111827;margin-right:8px;'></span> {}".format(
+            "- <span style='display:inline-block;width:12px;height:12px;background:{};border:1px solid #111827;margin-right:10px;'></span> {}".format(
                 TRACK_COLORS.get(t, '#2B2D42'), t
             ),
             unsafe_allow_html=True,
@@ -301,7 +370,6 @@ left, right = st.columns([0.68, 0.32], gap='large')
 
 graph = load_school_graph(school)
 
-# Selection state stores *course names*
 if 'selected_node' not in st.session_state:
     st.session_state.selected_node = None
 if 'selected_edge' not in st.session_state:
@@ -312,61 +380,65 @@ edge_uid_to_course = {f"{course_to_uid[s]}→{course_to_uid[t]}": f"{s}→{t}" f
 
 stylesheet = [
     {
-        "selector": "node",
-        "style": {
-            "label": "data(label)",
-            "background-color": "data(bg)",
-            "opacity": "data(opacity)",
-            "border-color": "data(border)",
-            "border-width": "data(borderWidth)",
-            "color": "#FFFFFF",
-            "text-valign": "center",
-            "text-halign": "center",
-            "font-size": 14,
-            "width": 60,
-            "height": 60,
+        'selector': 'node',
+        'style': {
+            'label': 'data(label)',
+            'background-color': 'data(bg)',
+            'opacity': 'data(opacity)',
+            'border-color': 'data(border)',
+            'border-width': 'data(borderWidth)',
+            'color': '#FFFFFF',
+            'text-valign': 'center',
+            'text-halign': 'center',
+            'font-size': 18,
+            'width': 64,
+            'height': 64,
+            'z-index': 1,
         },
     },
     {
-        "selector": "edge",
-        "style": {
-            "curve-style": "bezier",
-            "target-arrow-shape": "triangle",
-            "target-arrow-color": "data(color)",
-            "line-color": "data(color)",
-            "opacity": "data(opacity)",
-            "width": 3,
-            "label": "data(label)",
-            "font-size": 14,
-            "color": "#111827",
-            "text-background-color": "#FFFFFF",
-            "text-background-opacity": 0.85,
-            "text-background-padding": 2,
+        'selector': 'edge',
+        'style': {
+            'curve-style': 'bezier',
+            'target-arrow-shape': 'triangle',
+            'target-arrow-color': 'data(color)',
+            'line-color': 'data(color)',
+            'opacity': 'data(opacity)',
+            'width': 3,
+            'label': 'data(label)',
+            'font-size': 16,
+            'color': '#111827',
+            'text-background-color': '#FFFFFF',
+            'text-background-opacity': 0.85,
+            'text-background-padding': 3,
+            'z-index': 0,
         },
     },
-    # Self-loop styling so retake edges are visible
     {
-        "selector": "edge.selfloop",
-        "style": {
-            "loop-direction": -45,
-            "loop-sweep": 90,
-            "target-arrow-shape": "triangle",
-            "width": 4,
+        'selector': 'edge.selfloop',
+        'style': {
+            'curve-style': 'bezier',
+            'loop-direction': '-45deg',
+            'loop-sweep': '120deg',
+            'source-endpoint': 'outside-to-line',
+            'target-endpoint': 'outside-to-line',
+            'control-point-step-size': 140,
+            'width': 4,
+            'z-index-compare': 'manual',
+            'z-compound-depth': 'top',
+            'z-index': 9999,
         },
     },
-    {"selector": ".dim", "style": {"opacity": 0.18}},
-    {"selector": "edge.dim", "style": {"opacity": 0.10}},
-    {"selector": ".selected", "style": {"border-width": 6}},
+    {'selector': '.dim', 'style': {'opacity': 0.18}},
+    {'selector': 'edge.dim', 'style': {'opacity': 0.10}},
+    {'selector': '.selected', 'style': {'border-width': 6}},
 ]
 
-
 with left:
-    st.subheader(f'{school}: course flow map')
-    st.caption(
-        'Preset layout (fixed positions if provided). Drag nodes to adjust. '
-        'Click a course to focus and reveal transition rates on incident edges. '
-        'Self-loops show the retake/repeat share so each node’s outgoing probabilities sum to 1.'
-    )
+    st.header('Math class map')
+    st.write('Circles are classes. Arrows show where students go next.')
+    st.write('A looped arrow means some students repeat the same class.')
+    st.write('"Graduate" and "Leave School" are endings, so they have no arrows going out.')
 
     elements = build_cytoscape_elements(
         graph,
@@ -381,7 +453,7 @@ with left:
         stylesheet,
         width='100%',
         height='740px',
-        layout={"name": "preset", "animationDuration": 0},
+        layout={'name': 'preset', 'animationDuration': 0},
         selection_type='single',
         user_zooming_enabled=True,
         user_panning_enabled=True,
@@ -400,46 +472,41 @@ with left:
         st.session_state.selected_edge = edge_uid_to_course.get(uid_eid)
         st.session_state.selected_node = None
 
-    if st.button('Clear selection / reset focus'):
+    if st.button('Clear selection'):
         st.session_state.selected_node = None
         st.session_state.selected_edge = None
         st.rerun()
 
-    st.markdown('---')
-    st.caption('⚠️ Demo note: transition rates are illustrative and meant to be replaced with your actual data in production.')
-
 
 with right:
-    st.subheader('Selection (side panel)')
+    st.header('Details')
 
     if st.session_state.selected_node:
         course_panel(graph, st.session_state.selected_node)
 
     elif st.session_state.selected_edge:
-        st.subheader('Selected transition')
+        st.subheader('Arrow details')
         try:
             s, t = st.session_state.selected_edge.split('→')
-            st.write('**{} → {}**'.format(s, t))
+            st.write(f'**From:** {s}')
+            st.write(f'**To:** {t}')
         except Exception:
             st.write(st.session_state.selected_edge)
             s = t = None
 
         p = None
         for (ss, tt, pp) in graph['edges']:
-            if '{}→{}'.format(ss, tt) == st.session_state.selected_edge:
+            if f'{ss}→{tt}' == st.session_state.selected_edge:
                 p = float(pp)
                 break
 
         if p is not None:
-            st.write('Transition rate: **{:.2f}**'.format(p))
+            st.write(f'**Chance:** {friendly_percent(p)}')
 
         if s and t and s != t:
             et = edge_tracks(s, t, graph['tracks'])
             if et:
-                st.caption('Track highlight: ' + ', '.join(et))
-
-        st.markdown('---')
-        st.caption('Tip: click a course node to see the course details panel.')
+                st.write('**Path colors involved:** ' + ', '.join(et))
 
     else:
-        st.write('Click a course bubble to focus and see details here.')
+        st.write('Click a circle or an arrow to see more information here.')
